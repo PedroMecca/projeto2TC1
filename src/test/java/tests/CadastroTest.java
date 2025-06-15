@@ -27,32 +27,50 @@ public class CadastroTest {
 
     @Test
     public void testCadastrarComDadosValidos() {
-        cadastroPage.preencherNome("José da Silva");
-        cadastroPage.preencherEmail("jose@email.com");
-        cadastroPage.preencherTelefone("(11) 98765-4321");
+        String nome = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
         assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     @Test
-    public void testCadastrarComDadosinválidos() {
-        cadastroPage.preencherNome("José da Silva");
-        cadastroPage.preencherEmail("jose@123456.gh");
-        cadastroPage.preencherTelefone("(00) 98765-4321");
+    public void testCadastrarComDadosInvalidos() {
+        String nome = faker.name().fullName();
+        String emailInvalido = faker.lorem().word();
+        String telefoneInvalido = "(00) " + faker.number().digits(5) + "-" + faker.number().digits(4);
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(emailInvalido);
+        cadastroPage.preencherTelefone(telefoneInvalido);
         cadastroPage.clicarCadastrar();
 
-        assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     @Test
     public void testCadastrarComFaker() {
-        cadastroPage.preencherNome(faker.name().fullName());
-        cadastroPage.preencherEmail(faker.internet().emailAddress());
-        cadastroPage.preencherTelefone("(11) 99999-9999"); // exemplo com formato fixo
+        String nome = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
         assertTrue(cadastroPage.obterMensagemSucesso().contains("sucesso"));
     }
 
+    private String gerarTelefoneFaker() {
+        String ddd = String.valueOf(faker.number().numberBetween(11, 99));
+        String prefixo = faker.number().digits(5);
+        String sufixo = faker.number().digits(4);
+        return String.format("(%s) %s-%s", ddd, prefixo, sufixo);
+    }
 }
