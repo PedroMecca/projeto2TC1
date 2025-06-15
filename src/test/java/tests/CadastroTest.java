@@ -139,5 +139,32 @@ public class CadastroTest {
         assert(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
+    @Test
+    public void testTelefoneCurto() {
+        String nome = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String telefone = "(11) 1234-567";
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
+
+    @Test
+    public void testEmailComDominioInvalido() {
+        String nome = faker.name().fullName();
+        String email = "usuario@email";
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
 
 }
