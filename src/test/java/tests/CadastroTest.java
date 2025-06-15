@@ -125,5 +125,19 @@ public class CadastroTest {
         assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
-    
+    @Test
+    public void testNomeMuitoLongo() {
+        String nome = faker.lorem().characters(300);
+        String email = faker.internet().emailAddress();
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
+
+
 }
