@@ -139,5 +139,19 @@ public class CadastroTest {
         assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
+    @Test
+    public void testTelefoneCurto() {
+        String nome = faker.name().fullName();
+        String email = faker.internet().emailAddress();
+        String telefone = "(11) 1234-567";
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
+
 
 }
