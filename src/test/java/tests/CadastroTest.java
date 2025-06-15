@@ -110,7 +110,20 @@ public class CadastroTest {
 
         assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
+
+    @Test
+    public void testNomeComCaracteresEspeciais() {
+        String nome = "@#%$*! Nome123";
+        String email = faker.internet().emailAddress();
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
+
     
-
-
 }
