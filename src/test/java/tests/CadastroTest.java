@@ -64,7 +64,7 @@ public class CadastroTest {
         cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
-        assertTrue(cadastroPage.obterMensagemSucesso().contains("sucesso"));
+        assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     private String gerarTelefoneFaker() {
@@ -73,4 +73,14 @@ public class CadastroTest {
         String sufixo = faker.number().digits(4);
         return String.format("(%s) %s-%s", ddd, prefixo, sufixo);
     }
+    @Test
+    public void testCadastroComCamposVazios() {
+        cadastroPage.preencherNome("");
+        cadastroPage.preencherEmail("");
+        cadastroPage.preencherTelefone("");
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
+
 }
