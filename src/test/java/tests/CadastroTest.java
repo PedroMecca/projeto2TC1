@@ -153,5 +153,18 @@ public class CadastroTest {
         assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
+    @Test
+    public void testEmailComDominioInvalido() {
+        String nome = faker.name().fullName();
+        String email = "usuario@email";
+        String telefone = gerarTelefoneFaker();
+
+        cadastroPage.preencherNome(nome);
+        cadastroPage.preencherEmail(email);
+        cadastroPage.preencherTelefone(telefone);
+        cadastroPage.clicarCadastrar();
+
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+    }
 
 }
