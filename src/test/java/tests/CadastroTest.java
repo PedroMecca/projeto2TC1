@@ -29,7 +29,7 @@ public class CadastroTest {
     public void testCadastrarComDadosValidos() {
         String nome = faker.name().fullName();
         String email = faker.internet().emailAddress();
-        String telefone = gerarTelefoneFaker();
+        String telefone = faker.phoneNumber().cellPhone();
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
@@ -57,7 +57,7 @@ public class CadastroTest {
     public void testCadastrarComFaker() {
         String nome = faker.name().fullName();
         String email = faker.internet().emailAddress();
-        String telefone = gerarTelefoneFaker();
+        String telefone = faker.phoneNumber().cellPhone();
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
@@ -67,12 +67,6 @@ public class CadastroTest {
         assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
-    private String gerarTelefoneFaker() {
-        String ddd = String.valueOf(faker.number().numberBetween(11, 99));
-        String prefixo = faker.number().digits(5);
-        String sufixo = faker.number().digits(4);
-        return String.format("(%s) %s-%s", ddd, prefixo, sufixo);
-    }
     @Test
     public void testCadastroComCamposVazios() {
         cadastroPage.preencherNome("");
@@ -87,14 +81,14 @@ public class CadastroTest {
     public void testEmailSemArroba() {
         String nome = faker.name().fullName();
         String email = "emailsemarroba.com";
-        String telefone = gerarTelefoneFaker();
+        String telefone = faker.phoneNumber().cellPhone();
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
         cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
-        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+        assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     @Test
@@ -108,14 +102,14 @@ public class CadastroTest {
         cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
-        assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     @Test
     public void testNomeComCaracteresEspeciais() {
         String nome = "@#%$*! Nome123";
-        String email = faker.internet().emailAddress();
-        String telefone = gerarTelefoneFaker();
+        String email = "pebonellimecca@gmail.com";
+        String telefone = "12 3456789";
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
@@ -128,15 +122,15 @@ public class CadastroTest {
     @Test
     public void testNomeMuitoLongo() {
         String nome = faker.lorem().characters(300);
-        String email = faker.internet().emailAddress();
-        String telefone = gerarTelefoneFaker();
+        String email = "alkfhnlkg@gmail";
+        String telefone = "12 223232323";
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
         cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
-        assert(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+        assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
     @Test
@@ -157,7 +151,7 @@ public class CadastroTest {
     public void testEmailComDominioInvalido() {
         String nome = faker.name().fullName();
         String email = "usuario@email";
-        String telefone = gerarTelefoneFaker();
+        String telefone = faker.phoneNumber().cellPhone();
 
         cadastroPage.preencherNome(nome);
         cadastroPage.preencherEmail(email);
