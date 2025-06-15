@@ -136,7 +136,7 @@ public class CadastroTest {
         cadastroPage.preencherTelefone(telefone);
         cadastroPage.clicarCadastrar();
 
-        assertTrue(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
+        assert(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
 
 
