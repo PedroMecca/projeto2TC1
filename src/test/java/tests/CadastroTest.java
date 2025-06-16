@@ -2,9 +2,16 @@ package tests;
 
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.example.pages.CadastroPage;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,5 +167,49 @@ public class CadastroTest {
 
         assertFalse(cadastroPage.obterMensagemSucesso().contains("Contato salvo com sucesso!"));
     }
+
+    @Test
+    public void testCamposComEspacosEmBrancoDevemSerRejeitados() {
+        cadastroPage.preencherFormulario("     ", "     ", "     ");
+        cadastroPage.submeterFormulario();
+        assertTrue(driver.getPageSource().contains("erro") || driver.getPageSource().contains("preenchimento"));
+    }
+
+
+    @Test
+    public void testSubmissaoDuplicada() {
+        String nome = "Duplicado Teste";
+        String email = "duplicado@teste.com";
+        String telefone = "11912345678";
+
+        cadastroPage.preencherFormulario(nome, email, telefone);
+        cadastroPage.submeterFormulario();
+
+        cadastroPage.preencherFormulario(nome, email, telefone);
+        cadastroPage.submeterFormulario();
+
+        driver.get("https://projeto2-seven-sandy.vercel.app/index.html");
+        List<WebElement> cards = driver.findElements(By.className("card"));
+
+        long count = cards.stream().filter(c -> {
+            return c.getText().contains(nome);
+        }).count();
+        assertTrue(count <= 1, "Cadastro duplicado foi aceito!");
+    }
+
+    @Test
+    public void testNomeComQuebraDeLinha_DeveSerRejeitado() {
+        cadastroPage.preencherFormulario("Paulo\nHenrique", "paulo.linha@teste.com", "11998706670");
+        cadastroPage.submeterFormulario();
+
+        driver.get("https://projeto2-seven-sandy.vercel.app/contatos.html");
+
+        List<WebElement> cards = driver.findElements(By.className("card"));
+        boolean nomeComQuebraFoiSalvo = cards.stream()
+                .anyMatch(c -> c.getText().contains("Paulo") && c.getText().contains("Henrique"));
+
+        assertFalse(nomeComQuebraFoiSalvo, "Erro: nome com quebra de linha foi aceito e salvo!");
+    }
+
 
 }

@@ -30,4 +30,11 @@ public class CadastroPage {
     public String obterMensagemSucesso() {
         return driver.findElement(By.id("success-message")).getText();
     }
+
+    public void preencherFormulario(String nome, String email, String telefone) {
+    }
+
+    public void submeterFormulario() {
+
+    }
 }
